@@ -1,8 +1,11 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_login_register/login.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:page_indicator/page_indicator.dart';
+
+
 
 const googleClientId= '3515536203-ai8l2d4k660scftd9bp3h6m5l8qeh7v8.apps.googleusercontent.com';
 
@@ -25,7 +28,7 @@ class StartScreen extends StatelessWidget {
 
 class _StartPager extends StatelessWidget{
 
-  final String exampleText = 'Hola que tal';
+  final String exampleText = 'Desliza';
 
 
   @override
@@ -33,7 +36,7 @@ class _StartPager extends StatelessWidget{
 
     return PageIndicatorContainer(
     align: IndicatorAlign.bottom,
-    length: 4,
+    length: 2,
     indicatorSpace: 12,
     indicatorColor: Colors.blueAccent,
     indicatorSelectorColor: Colors.black,
@@ -41,11 +44,14 @@ class _StartPager extends StatelessWidget{
       children: <Widget>[
         _DescriptionPage(text: exampleText, 
         imagePath: 'assets/img1.png'),
-        _DescriptionPage(text: exampleText, 
-        imagePath: 'assets/img2.png'),
-        _DescriptionPage(text: exampleText, 
-        imagePath: 'assets/img3.png'),
-        _LoginPage()
+        // _DescriptionPage(text: exampleText, 
+        // imagePath: 'assets/img2.png'),
+        // _DescriptionPage(text: exampleText, 
+        // imagePath: 'assets/img3.png'),
+
+        //login
+        LoginPage()
+      
        
       ],
     ),
@@ -54,8 +60,6 @@ class _StartPager extends StatelessWidget{
     );
   }
 }
-
-
 
 //Para emplear las imagenes en cada indicador
 
@@ -101,19 +105,3 @@ class _DescriptionPage extends StatelessWidget{
 }
 
 
-class _LoginPage extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context){
-    return const SignInScreen(
-
-      providerConfigs:[
-
-      
-        GoogleProviderConfiguration(clientId: googleClientId),
-        // FacebookProviderConfiguration(clientId: ''),
-        EmailProviderConfiguration()
-      ],
-    );
-  }
-}

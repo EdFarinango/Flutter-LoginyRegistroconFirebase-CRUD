@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_register/src/repository/auth.dart';
 import 'package:flutter_login_register/src/ui/firebase_service.dart';
 import 'package:flutter_login_register/src/ui/homeScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -87,7 +88,7 @@ class _TeacherState extends State<Teacher> {
                           icon: Icon(Icons.delete),
                           onPressed: () async {
                             await firebaseService
-                                .deleteUserAccount(documentSnapshot.id);
+                                .deleteUserAccount(documentSnapshot.id, UserUID);
                             Fluttertoast.showToast(msg: 'Usuario eliminado');
                           },
                         ),

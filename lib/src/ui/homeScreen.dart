@@ -59,7 +59,7 @@ class UserListScreen extends StatelessWidget {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: Text('User List'),
+      title: Text('Lista de usuarios registrados'),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.exit_to_app),
@@ -113,7 +113,7 @@ Widget build(BuildContext context) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (_auth.currentUser!.email == 'epfarinango@gmail.com')
+            if (_auth.currentUser!.email == 'epfarinango@gmail.com' || _auth.currentUser!.email == 'stalinvalencia24@gmail.com')
               TextButton(
                 onPressed: () {
                   Navigator.push(

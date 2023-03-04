@@ -29,22 +29,20 @@ class _RegisterState extends State<Register> {
   bool _isObscure2 = true;
   File? file;
   var options = [
-    '   ',
-    'Admin',
-    'User',
+   'User',
   ];
-  var _currentItemSelected = '   ';
-  var rool = "Admin";
+  var _currentItemSelected = 'User';
+  var rool = "User";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[900],
+      backgroundColor: Color.fromARGB(255, 112, 219, 233),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.orangeAccent[700],
+              color: Color.fromARGB(255, 80, 210, 214),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
@@ -60,7 +58,7 @@ class _RegisterState extends State<Register> {
                           height: 80,
                         ),
                         Text(
-                          "Register Now",
+                          "Registrase Ahora",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -224,12 +222,13 @@ class _RegisterState extends State<Register> {
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (newValueSelected) {
+                              /*******solo user */
+                              onChanged: (String? newValueSelected) {
                                 setState(() {
-                                  _currentItemSelected = newValueSelected!;
-                                  rool = newValueSelected;
+                                  this._currentItemSelected = newValueSelected!;
                                 });
                               },
+                              
                               value: _currentItemSelected,
                             ),
                           ],
@@ -278,7 +277,7 @@ class _RegisterState extends State<Register> {
                                     passwordController.text, rool);
                               },
                               child: Text(
-                                "Register",
+                                "Registrarse",
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
@@ -291,7 +290,7 @@ class _RegisterState extends State<Register> {
                           height: 20,
                         ),
                         Text(
-                          "WEBFUN",
+                          "BiciBuho",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 30,

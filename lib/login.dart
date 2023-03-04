@@ -6,17 +6,19 @@ import 'user.dart';
 import 'admin.dart';
 import 'register.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:ui';
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 
- 
-
   
 }
 
+
+
 class _LoginPageState extends State<LoginPage> {
+  String locale = window.locale.toString();
   bool _isObscure3 = true;
   bool visible = false;
   final _formkey = GlobalKey<FormState>();
@@ -24,6 +26,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = new TextEditingController();
 
   final _auth = FirebaseAuth.instance;
+  void refresh() {
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -261,38 +266,124 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void route() {
+//   void route() {
+//     User? user = FirebaseAuth.instance.currentUser;
+//     var kk = FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(user!.uid)
+//         .get()
+//         .then((DocumentSnapshot documentSnapshot) {
+//       if (documentSnapshot.exists) {
+//         if (documentSnapshot.get('rol') == 'Admin') {
+//           print('***************************************************************' + documentSnapshot.get('rol'));
+//           Navigator.pushReplacement(
+//             context,
+//             MaterialPageRoute(
+//               builder: (context) => const HomeScreen(),
+//             ),
+//           );
+//         } else {
+//           if (documentSnapshot.get('rol') == 'User') {
+//             print('***************************************************************' + documentSnapshot.get('rol'));
+//             Navigator.pushReplacement(
+//               context,
+//               MaterialPageRoute(
+//                 builder: (context) => const Student(),
+//               ),
+//             );
+//           }
+
+//         }
+//       } else {
+//         print('Document does not exist on the database');
+//       }
+//     });
+//   }
+
+//   void signIn(String email, String password) async {
+//     if (_formkey.currentState!.validate()) {
+//       try {
+//         UserCredential userCredential =
+//             await FirebaseAuth.instance.signInWithEmailAndPassword(
+//           email: email,
+//           password: password,
+//         );
+//          if (mounted == false) {
+//     route();
+//   }
+//       } on FirebaseAuthException catch (e) {
+//         if (e.code == 'user-not-found') {
+//           print('No user found for that email.');
+//           toastMessage('No existe un usuario con ese correo');
+//           setState(() {
+//             visible = false;
+//           });
+
+//         } else if (e.code == 'wrong-password') {
+//           print('Wrong password provided for that user.');
+//           toastMessage('Contraseña incorrecta');
+//           setState(() {
+//             visible = false;
+//           });
+
+//         }
+//       }
+//     }
+//   }
+
+//   void toastMessage(String s) {
+
+//     Fluttertoast.showToast(
+//         msg: s,
+//         toastLength: Toast.LENGTH_SHORT,
+//         gravity: ToastGravity.BOTTOM,
+//         timeInSecForIosWeb: 1,
+//         backgroundColor: Colors.blue[900],
+//         textColor: Colors.white,
+//         fontSize: 16.0);
+//   }
+// }
+
+  void navigateToHomePage(String userRole) {
+    if (userRole == 'Admin') {
+      print('User is an admin');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    } else if (userRole == 'User') {
+      print('User is a student');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Student(),
+        ),
+      );
+    } else {
+      print('Unknown user role');
+    }
+  }
+
+  Future<void> route() async {
     User? user = FirebaseAuth.instance.currentUser;
-    var kk = FirebaseFirestore.instance
+    if (user == null) {
+      print('User is null');
+      return;
+    }
+
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .doc(user!.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        if (documentSnapshot.get('rol') == 'Admin') {
-          print('***************************************************************' + documentSnapshot.get('rol'));
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
-        } else {
-          if (documentSnapshot.get('rol') == 'User') {
-            print('***************************************************************' + documentSnapshot.get('rol'));
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Student(),
-              ),
-            );
-          }
-          
-        }
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
+        .doc(user.uid)
+        .get();
+    if (!documentSnapshot.exists) {
+      print('Document does not exist on the database');
+      return;
+    }
+
+    String userRole = documentSnapshot.get('rol');
+    navigateToHomePage(userRole);
   }
 
   void signIn(String email, String password) async {
@@ -303,31 +394,34 @@ class _LoginPageState extends State<LoginPage> {
           email: email,
           password: password,
         );
-         if (mounted == false) {
-    route();
-  }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-          toastMessage('No existe un usuario con ese correo');
-          setState(() {
-            visible = false;
-          });
-          
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-          toastMessage('Contraseña incorrecta');
-          setState(() {
-            visible = false;
-          });
-          
+        if (mounted == false) {
+          await route();
         }
+      } on FirebaseAuthException catch (e) {
+        print('FirebaseAuthException: ${e.code}');
+        String errorMessage = '';
+        if (e.code == 'user-not-found') {
+          errorMessage = 'No existe un usuario con ese correo';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Contraseña incorrecta';
+        } else {
+          errorMessage = 'Error al iniciar sesión';
+        }
+        toastMessage(errorMessage);
+        setState(() {
+          visible = false;
+        });
+      } catch (e) {
+        print('Error: $e');
+        toastMessage('Error al iniciar sesión');
+        setState(() {
+          visible = false;
+        });
       }
     }
   }
-  
-  void toastMessage(String s) {
 
+  void toastMessage(String s) {
     Fluttertoast.showToast(
         msg: s,
         toastLength: Toast.LENGTH_SHORT,
@@ -338,3 +432,4 @@ class _LoginPageState extends State<LoginPage> {
         fontSize: 16.0);
   }
 }
+

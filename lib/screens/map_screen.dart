@@ -107,11 +107,13 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  //********************************************* */
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Map'),
+        title: Text('Ubicaciones de usuarios'),
       ),
       body: _isLoading
           ? Center(

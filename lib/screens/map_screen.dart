@@ -26,6 +26,8 @@ class _MapScreenState extends State<MapScreen> {
         .map((snapshot) {
       return snapshot.docs.map((doc) {
         final userId = doc.id;
+    
+      
         final geoPoint = doc['location'] as GeoPoint;
         final location = LatLng(geoPoint.latitude, geoPoint.longitude);
 
@@ -34,6 +36,9 @@ class _MapScreenState extends State<MapScreen> {
           position: location,
           infoWindow: InfoWindow(
             title: userId,
+            snippet: location.toString(),
+
+
           ),
         );
       }).toSet();
@@ -59,7 +64,7 @@ class _MapScreenState extends State<MapScreen> {
 
       _saveUserLocation();
 
-      Timer.periodic(Duration(seconds: 30), (timer) {
+      Timer.periodic(const Duration(seconds: 30), (timer) {
         _saveUserLocation();
       });
     } catch (e) {
@@ -107,14 +112,29 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  //********************************************* */
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ubicaciones de usuarios'),
-      ),
+  title: Text(
+    'Mapa BiciBuho',
+    style: TextStyle(
+      color: Colors.white, // define el color del texto en la AppBar
+      fontWeight: FontWeight.bold, // define el peso de la fuente del texto en la AppBar
+      fontSize: 20.0, // define el tamaño de la fuente del texto en la AppBar
+      fontFamily: 'Roboto', // define la fuente de la fuente del texto en la AppBar
+    ),
+  ),
+  backgroundColor: Color.fromARGB(255, 171, 206, 235), // define el color de fondo de la AppBar
+  elevation: 0, // elimina la sombra debajo de la AppBar
+  centerTitle: true, // centra el título en la AppBar
+  leading: IconButton(
+    icon: Icon(Icons.arrow_back),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  ),
+),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -129,6 +149,28 @@ class _MapScreenState extends State<MapScreen> {
                       zoom: 15,
                     ),
                     markers: snapshot.data!,
+
+                  //  onMapCreated: (GoogleMapController controller) async {
+                  //     await _getUserLocation();
+                  //     controller.animateCamera(
+                  //       CameraUpdate.newCameraPosition(
+                  //         CameraPosition(
+                  //           target: _currentLocation,
+                  //           zoom: 8,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   myLocationEnabled: true,
+                  //   myLocationButtonEnabled: true,
+                  //   onCameraMove: (position) {
+                  //     setState(() {
+                  //       _currentLocation = position.target;
+                  //     });
+                  //   },
+
+
+
                   );
                 } else {
                   return Center(

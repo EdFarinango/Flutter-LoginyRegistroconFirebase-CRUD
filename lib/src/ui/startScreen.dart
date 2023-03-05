@@ -16,7 +16,9 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bienvenido'),
+        title: const Text('BiciBuho'),
+
+        backgroundColor: Color.fromARGB(255, 180, 202, 240),
       ),
       body: _StartPager(),
 
@@ -28,7 +30,7 @@ class StartScreen extends StatelessWidget {
 
 class _StartPager extends StatelessWidget{
 
-  final String exampleText = 'Desliza';
+  final String exampleText = 'Hola Desliza para viajar con BiciBuho';
 
 
   @override
@@ -43,13 +45,15 @@ class _StartPager extends StatelessWidget{
     child: PageView(
       children: <Widget>[
         _DescriptionPage(text: exampleText, 
-        imagePath: 'assets/img1.png'),
+        imagePath: 'assets/buho.png'),
         // _DescriptionPage(text: exampleText, 
         // imagePath: 'assets/img2.png'),
         // _DescriptionPage(text: exampleText, 
         // imagePath: 'assets/img3.png'),
 
-        //login
+     
+
+
         LoginPage()
       
        

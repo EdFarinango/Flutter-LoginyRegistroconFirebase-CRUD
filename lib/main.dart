@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_register/src/app.dart';
+import 'firebase_options.dart';
 
-import 'package:flutter_login_register/firebase_options.dart';
+
 import 'package:flutter_login_register/src/cubits/authCubits.dart';
 import 'package:flutter_login_register/src/data_source/firebase_data_source.dart';
 import 'package:flutter_login_register/src/repository/auth.dart';

@@ -215,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       color: Colors.blue[900],
                       child: Text(
-                        "Resgistrate Ahora",
+                        "Regístrate Ahora",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -266,39 +266,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-//   void route() {
-//     User? user = FirebaseAuth.instance.currentUser;
-//     var kk = FirebaseFirestore.instance
-//         .collection('users')
-//         .doc(user!.uid)
-//         .get()
-//         .then((DocumentSnapshot documentSnapshot) {
-//       if (documentSnapshot.exists) {
-//         if (documentSnapshot.get('rol') == 'Admin') {
-//           print('***************************************************************' + documentSnapshot.get('rol'));
-//           Navigator.pushReplacement(
-//             context,
-//             MaterialPageRoute(
-//               builder: (context) => const HomeScreen(),
-//             ),
-//           );
-//         } else {
-//           if (documentSnapshot.get('rol') == 'User') {
-//             print('***************************************************************' + documentSnapshot.get('rol'));
-//             Navigator.pushReplacement(
-//               context,
-//               MaterialPageRoute(
-//                 builder: (context) => const Student(),
-//               ),
-//             );
-//           }
+  void route() {
+    User? user = FirebaseAuth.instance.currentUser;
+    var kk = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        if (documentSnapshot.get('rol') == 'Admin') {
+          print('***************************************************************' + documentSnapshot.get('rol'));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        } else {
+          if (documentSnapshot.get('rol') == 'User') {
+            print('***************************************************************' + documentSnapshot.get('rol'));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Student(),
+              ),
+            );
+          }
 
-//         }
-//       } else {
-//         print('Document does not exist on the database');
-//       }
-//     });
-//   }
+        }
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+  }
 
 //   void signIn(String email, String password) async {
 //     if (_formkey.currentState!.validate()) {
@@ -344,47 +344,82 @@ class _LoginPageState extends State<LoginPage> {
 //   }
 // }
 
-  void navigateToHomePage(String userRole) {
-    if (userRole == 'Admin') {
-      print('User is an admin');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
-        ),
-      );
-    } else if (userRole == 'User') {
-      print('User is a student');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Student(),
-        ),
-      );
-    } else {
-      print('Unknown user role');
-    }
-  }
+  // void navigateToHomePage(String userRole) {
+  //   if (userRole == 'Admin') {
+  //     print('User is an admin');
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => const HomeScreen(),
+  //       ),
+  //     );
+  //   } else if (userRole == 'User') {
+  //     print('User is a student');
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => const Student(),
+  //       ),
+  //     );
+  //   } else {
+  //     print('Unknown user role');
+  //   }
+  // }
 
-  Future<void> route() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      print('User is null');
-      return;
-    }
+  // Future<void> route() async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   if (user == null) {
+  //     print('User is null');
+  //     return;
+  //   }
 
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
-    if (!documentSnapshot.exists) {
-      print('Document does not exist on the database');
-      return;
-    }
+  //   DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(user.uid)
+  //       .get();
+  //   if (!documentSnapshot.exists) {
+  //     print('Document does not exist on the database');
+  //     return;
+  //   }
 
-    String userRole = documentSnapshot.get('rol');
-    navigateToHomePage(userRole);
-  }
+  //   String userRole = documentSnapshot.get('rol');
+  //   navigateToHomePage(userRole);
+  // }
+
+  // void signIn(String email, String password) async {
+  //   if (_formkey.currentState!.validate()) {
+  //     try {
+  //       UserCredential userCredential =
+  //           await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //         email: email,
+  //         password: password,
+  //       );
+  //       if (mounted == false) {
+  //         await route();
+  //       }
+  //     } on FirebaseAuthException catch (e) {
+  //       print('FirebaseAuthException: ${e.code}');
+  //       String errorMessage = '';
+  //       if (e.code == 'user-not-found') {
+  //         errorMessage = 'No existe un usuario con ese correo';
+  //       } else if (e.code == 'wrong-password') {
+  //         errorMessage = 'Contraseña incorrecta';
+  //       } else {
+  //         errorMessage = 'Error al iniciar sesión';
+  //       }
+  //       toastMessage(errorMessage);
+  //       setState(() {
+  //         visible = false;
+  //       });
+  //     } catch (e) {
+  //       print('Error: $e');
+  //       toastMessage('Error al iniciar sesión');
+  //       setState(() {
+  //         visible = false;
+  //       });
+  //     }
+  //   }
+  // }
 
   void signIn(String email, String password) async {
     if (_formkey.currentState!.validate()) {
@@ -395,7 +430,7 @@ class _LoginPageState extends State<LoginPage> {
           password: password,
         );
         if (mounted == false) {
-          await route();
+          route();
         }
       } on FirebaseAuthException catch (e) {
         print('FirebaseAuthException: ${e.code}');
@@ -408,18 +443,17 @@ class _LoginPageState extends State<LoginPage> {
           errorMessage = 'Error al iniciar sesión';
         }
         toastMessage(errorMessage);
-        setState(() {
-          visible = false;
-        });
       } catch (e) {
         print('Error: $e');
         toastMessage('Error al iniciar sesión');
+      } finally {
         setState(() {
           visible = false;
         });
       }
     }
   }
+
 
   void toastMessage(String s) {
     Fluttertoast.showToast(

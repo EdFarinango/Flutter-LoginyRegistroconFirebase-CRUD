@@ -16,97 +16,104 @@ class Teacher extends StatefulWidget {
 }
 
 class _TeacherState extends State<Teacher> {
-   FirebaseService firebaseService = FirebaseService();
+  FirebaseService firebaseService = FirebaseService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final CollectionReference _usersRef =
       FirebaseFirestore.instance.collection('users');
 
   Stream<QuerySnapshot> get usersStream => _usersRef.snapshots();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Panel de administración"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              logout(context);
-            },
-            icon: Icon(
-              Icons.logout,
-            ),
-          )
-        ],
+  title: Text("Panel de administración"),
+  backgroundColor: Color.fromARGB(255, 204, 220, 233), // define el color de fondo de la AppBar
+  actions: [
+    IconButton(
+      onPressed: () {
+        logout(context);
+      },
+      icon: Icon(
+        Icons.logout,
+        color: Colors.white, // define el color del ícono
       ),
+    )
+  ],
+),
       body: StreamBuilder<QuerySnapshot>(
         stream: usersStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-              return ListTile(
-                title: Text(documentSnapshot['email']),
-                subtitle: Text(documentSnapshot['rol']),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    
-                    if (documentSnapshot['email'] != _auth.currentUser!.email)
-                 
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditUserScreen(
-                                userId: documentSnapshot.id,
-                                email: documentSnapshot['email'],
-                                rol: documentSnapshot['rol'],
+              return Card(
+                child: ListTile(
+                  title: Text(
+                    documentSnapshot['email'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    documentSnapshot['rol'],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (documentSnapshot['email'] != _auth.currentUser!.email)
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditUserScreen(
+                                  userId: documentSnapshot.id,
+                                  email: documentSnapshot['email'],
+                                  rol: documentSnapshot['rol'],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-
-                    //verificar usuario logueado
-                      
-                    if (documentSnapshot['email'] != _auth.currentUser!.email)
-                     
-                      
+                            );
+                          },
+                          color: Colors.blue,
+                        ),
+                      if (documentSnapshot['email'] != _auth.currentUser!.email)
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () async {
-                            await firebaseService
-                                .deleteUserAccount(documentSnapshot.id, UserUID);
+                            await firebaseService.deleteUserAccount(
+                                documentSnapshot.id, UserUID);
                             Fluttertoast.showToast(msg: 'Usuario eliminado');
                           },
+                          color: Colors.red,
                         ),
-                    if (documentSnapshot['email'] == _auth.currentUser!.email)
-                    //if (documentSnapshot['rol'] == 'admin')
+                      if (documentSnapshot['email'] == _auth.currentUser!.email)
                         IconButton(
                           icon: Icon(Icons.edit_attributes),
-                          onPressed: () async {
-                           
-                          },
+                          onPressed: () async {},
+                          color: Colors.green,
                         ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
           );
-
-
         },
       ),
     );

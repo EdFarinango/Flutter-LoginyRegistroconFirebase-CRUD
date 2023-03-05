@@ -60,6 +60,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: Text('Lista de usuarios registrados'),
+      backgroundColor: Color.fromARGB(255, 193, 215, 233), // define el color de fondo de la AppBar
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.exit_to_app),
@@ -81,19 +82,33 @@ Widget build(BuildContext context) {
         }
 
         return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-            return ListTile(
-              title: Text(documentSnapshot['email']),
-              subtitle: Text(documentSnapshot['rol']),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                
-              ),
-            );
-          },
-        );
+  itemCount: snapshot.data!.docs.length,
+  itemBuilder: (context, index) {
+    DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
+    return ListTileTheme(
+      selectedColor: Colors.blue, // cambiar el color de fondo cuando se selecciona un elemento
+      child: ListTile(
+        title: Text(
+          documentSnapshot['email'],
+          style: TextStyle(
+            fontWeight: FontWeight.bold, // cambiar el estilo de texto del título
+            fontSize: 16.0,
+          ),
+        ),
+        subtitle: Text(
+          documentSnapshot['rol'],
+          style: TextStyle(
+            color: Colors.grey, // cambiar el color de texto del subtítulo
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+        ),
+      ),
+    );
+  },
+);
+
       },
     ),
     floatingActionButton: FloatingActionButton(
@@ -108,27 +123,32 @@ Widget build(BuildContext context) {
       },
     ),
     bottomNavigationBar: BottomAppBar(
-      child: Container(
-        height: 50.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (_auth.currentUser!.email == 'epfarinango@gmail.com' || _auth.currentUser!.email == 'stalinvalencia24@gmail.com')
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Teacher(),
-                    ),
-                  );
-                },
-                child: const  Text('Administrar usuarios'),
-              ),
-          ],
-        ),
-      ),
+  color: Colors.white,
+  child: Container(
+    height: 50.0,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        if (_auth.currentUser!.email == 'epfarinango@gmail.com' || _auth.currentUser!.email == 'stalinvalencia24@gmail.com')
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Teacher(),
+                ),
+              );
+            },
+            child: const Text(
+              'Administrar usuarios',
+              style: TextStyle(color: Colors.blue, fontSize: 18.0),
+            ),
+          ),
+      ],
     ),
+  ),
+),
+
 
   );
 }
@@ -195,11 +215,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
 
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar usuario'),
+         backgroundColor: Color.fromARGB(255, 204, 220, 233), 
       ),
       body: Form(
         key: _formKey,
@@ -210,6 +231,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
+                contentPadding: EdgeInsets.all(10),
               ),
               validator: (value) {
                 if (value!.isEmpty) {
@@ -222,6 +244,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               controller: _rolController,
               decoration: InputDecoration(
                 labelText: 'Rol',
+                contentPadding: EdgeInsets.all(10),
               ),
               validator: (value) {
                 if (value!.isEmpty) {

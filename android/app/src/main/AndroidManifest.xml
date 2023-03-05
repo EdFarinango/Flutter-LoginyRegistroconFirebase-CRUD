@@ -11,9 +11,9 @@
    
     
    <application
-        android:label="flutter_login_register"
+        android:label="BiciBúho"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data 
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDvlFYsuoV0T64Nt4yEi0aPVP1QjLDVsvU"
